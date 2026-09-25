@@ -33,23 +33,20 @@
   /* Logo badge hangs from the top of the header; its lower half overlaps the hero.
      Header is 73px tall, so a 146px badge starting at the header top is exactly half over. */
   .brand{position:relative; width:156px; height:52px; flex:0 0 auto;}
-  /* Pendant shape: flat top, U-curved bottom, gold gradient rim, inner hairline and a gold diamond at the tip. */
-  .brand-badge{position:absolute; left:0; top:-10px; height:156px; padding:10px 16px 32px;
-    border:2px solid transparent; border-top:0; border-radius:0 0 50% 50% / 0 0 36% 36%;
-    background:linear-gradient(#fff,#fff) padding-box, linear-gradient(165deg,#EBD6A8 0%,#B08D57 45%,#7E5E2F 100%) border-box;
-    box-shadow:0 16px 34px rgba(20,7,9,0.32), 0 2px 6px rgba(20,7,9,0.12);
-    transition:height .4s ease, padding .4s ease, border-radius .4s ease, box-shadow .4s ease;}
-  .brand-badge::before{content:''; position:absolute; inset:0 6px 6px; border:1px solid rgba(176,141,87,0.55); border-top:0; border-radius:inherit; pointer-events:none; transition:opacity .3s ease;}
-  .brand-badge::after{content:''; position:absolute; left:50%; bottom:-7px; width:12px; height:12px; margin-left:-6px; transform:rotate(45deg); background:linear-gradient(135deg,#EBD6A8,#B08D57 55%,#7E5E2F); box-shadow:0 0 0 3px #fff, 0 3px 8px rgba(20,7,9,0.3); transition:opacity .3s ease;}
-  .brand-badge img{position:relative; height:100%; width:auto;}
-  header.is-scrolled .brand-badge{height:62px; top:-5px; padding:4px 10px 6px; border-radius:0 0 14px 14px / 0 0 14px 14px; box-shadow:0 4px 12px rgba(20,7,9,0.12);}
-  header.is-scrolled .brand-badge::before, header.is-scrolled .brand-badge::after{opacity:0;}
+  /* Diamond badge: flat table at the page top, angled crown, girdle, and a faceted
+     pavilion whose point hangs over the hero. Drawn in SVG so the gold rim follows the cut. */
+  .brand-badge{position:absolute; left:0; top:-10px; width:156px; height:205px; transform-origin:top left;
+    filter:drop-shadow(0 14px 20px rgba(20,7,9,0.35)) drop-shadow(0 2px 4px rgba(20,7,9,0.15));
+    transition:transform .45s ease, filter .45s ease;}
+  .badge-gem{position:absolute; inset:0; width:100%; height:100%; overflow:visible;}
+  .brand-badge img{position:absolute; left:13%; top:5%; width:74%; height:auto; mix-blend-mode:multiply;}
+  header.is-scrolled .brand-badge{transform:scale(0.4); filter:drop-shadow(0 4px 6px rgba(20,7,9,0.2));}
   nav ul{list-style:none; display:flex; gap:30px; font-size:0.82rem; letter-spacing:0.06em;}
   nav a{position:relative; padding-bottom:4px;}
   nav a::after{content:''; position:absolute; left:0; right:100%; bottom:0; height:1px; background:var(--maroon); transition:right .35s ease;}
   nav a:hover::after{right:0;}
   .nav-actions{display:flex; align-items:center; gap:18px;}
-  .btn-outline{border:1px solid var(--maroon); color:var(--maroon); padding:10px 22px; font-size:0.78rem; letter-spacing:0.08em; transition:all .3s ease;}
+  .btn-outline{border:1px solid var(--maroon); color:var(--maroon); padding:10px 22px; font-size:0.78rem; letter-spacing:0.08em; background:transparent; font-family:inherit; transition:all .3s ease;}
   .btn-outline:hover{background:var(--maroon); color:var(--ivory);}
   .icon-btn{width:20px; height:20px; opacity:0.75; cursor:pointer; color:var(--charcoal);}
   .hamburger{display:none; flex-direction:column; gap:5px; cursor:pointer;}
@@ -113,20 +110,54 @@
   /* COLLECTIONS */
   .collections{background:var(--cream);}
   .coll-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--maroon-soft);}
-  .coll-card{position:relative; aspect-ratio:3/4; overflow:hidden; background:var(--maroon-dark); display:flex; align-items:flex-end; padding:26px;}
+  .coll-card{position:relative; aspect-ratio:3/4; overflow:hidden; background:var(--maroon-dark); display:flex; flex-direction:column; justify-content:flex-end; align-items:flex-start; padding:26px; border:0; width:100%; font:inherit; text-align:left; cursor:pointer;}
+  .coll-card:focus-visible{outline:2px solid var(--gold); outline-offset:-6px;}
+  .coll-hint{position:relative; z-index:2; margin-top:6px; font-size:0.66rem; letter-spacing:0.2em; color:#F1DDB4; opacity:0.9; text-shadow:0 1px 6px rgba(20,7,9,0.6); transform:translateY(4px); transition:opacity .4s ease, transform .4s ease;}
+  .coll-card:hover .coll-hint, .coll-card:focus-visible .coll-hint{opacity:1; transform:none;}
   .coll-card img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .6s ease;}
   .coll-card:hover img{transform:scale(1.06);}
   .coll-card span{position:relative; z-index:2; color:var(--ivory); font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-style:italic;}
-  .coll-card::before{content:''; position:absolute; inset:0; background:linear-gradient(0deg, rgba(20,7,9,0.6), transparent 55%); z-index:1;}
+  .coll-card::before{content:''; position:absolute; inset:0; background:linear-gradient(0deg, rgba(20,7,9,0.72), transparent 55%); z-index:1;}
 
   /* STRIP GALLERY */
   .strip{display:flex; gap:12px; overflow-x:auto; padding:6px 0 16px; scrollbar-width:thin;}
-  .strip img{width:110px; height:110px; object-fit:cover; flex:0 0 auto; border:1px solid var(--maroon-soft);}
+  .strip-item{flex:0 0 auto; padding:0; border:0; background:none; cursor:pointer; overflow:hidden;}
+  .strip img{width:110px; height:110px; object-fit:cover; border:1px solid var(--maroon-soft); transition:transform .4s ease, opacity .3s ease;}
+  .strip-item:hover img{transform:scale(1.06); opacity:0.9;}
+  .strip-item:focus-visible{outline:2px solid var(--maroon); outline-offset:2px;}
 
   /* FEATURED PRODUCTS */
   .products-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:34px;}
-  .product-frame{aspect-ratio:1/1.15; background:var(--cream); position:relative; overflow:hidden; margin-bottom:16px;}
-  .product-frame img{width:100%; height:100%; object-fit:cover;}
+  .product-frame{display:block; width:100%; padding:0; border:0; cursor:pointer; aspect-ratio:1/1.15; background:var(--cream); position:relative; overflow:hidden; margin-bottom:16px;}
+  .product-frame img{width:100%; height:100%; object-fit:cover; transition:transform .6s ease;}
+  .product-frame:hover img{transform:scale(1.05);}
+  .product-frame:focus-visible{outline:2px solid var(--maroon); outline-offset:3px;}
+  .photo-count{position:absolute; top:12px; right:12px; display:flex; align-items:center; gap:6px; padding:5px 10px; border-radius:20px; font-size:0.66rem; letter-spacing:0.12em; color:var(--ivory); background:rgba(20,7,9,0.55); backdrop-filter:blur(4px);}
+  .photo-count svg{width:12px; height:12px;}
+
+  /* LIGHTBOX */
+  html.lb-open{overflow:hidden;}
+  .lb{position:fixed; inset:0; width:100%; height:100%; max-width:none; max-height:none; margin:0; padding:0; border:0; background:rgba(18,6,8,0.97); color:var(--ivory);}
+  .lb[open]{display:grid; grid-template-rows:auto minmax(0,1fr) auto;}
+  .lb::backdrop{background:rgba(18,6,8,0.6);}
+  .lb-top{display:flex; align-items:center; gap:20px; padding:16px 28px; border-bottom:1px solid rgba(176,141,87,0.22);}
+  .lb-top .eyebrow{font-size:0.62rem; margin-bottom:4px;}
+  .lb-title{font-size:clamp(1.25rem,2.4vw,1.7rem); font-style:italic;}
+  .lb-count{margin-left:auto; font-size:0.78rem; letter-spacing:0.2em; color:#D9C6C2; white-space:nowrap;}
+  .lb-stage{position:relative; min-height:0; padding:22px 88px; touch-action:pan-y;}
+  .lb-img{width:100%; height:100%; object-fit:contain; transition:opacity .35s ease;}
+  .lb-img.is-loading{opacity:0;}
+  .lb-prev, .lb-next{position:absolute; top:50%; margin-top:-22px; z-index:2;}
+  .lb-prev{left:24px;} .lb-next{right:24px;}
+  .lb-bottom{display:flex; flex-direction:column; align-items:center; gap:14px; padding:12px 28px 22px;}
+  .lb-thumbs{position:relative; display:flex; gap:8px; max-width:100%; overflow-x:auto; padding:4px; scrollbar-width:none;}
+  .lb-thumbs::-webkit-scrollbar{display:none;}
+  .lb-thumb{flex:0 0 auto; width:62px; height:62px; padding:0; background:none; cursor:pointer; border:1px solid transparent; opacity:0.45; transition:opacity .3s ease, border-color .3s ease;}
+  .lb-thumb:hover{opacity:0.8;}
+  .lb-thumb[aria-current="true"]{opacity:1; border-color:var(--gold);}
+  .lb-thumb img{width:100%; height:100%; object-fit:cover;}
+  .lb-enquire{display:inline-flex; align-items:center; gap:10px;}
+  .lb-enquire svg{width:16px; height:16px;}
   .product-name{font-family:'Cormorant Garamond',serif; font-size:1.15rem; font-style:italic;}
   .product-meta{font-size:0.75rem; letter-spacing:0.05em; color:#8a6a5e; margin-top:4px;}
   .product-price{font-size:0.85rem; margin-top:10px; color:var(--charcoal);}
@@ -145,8 +176,30 @@
   .appt-wrap{display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start;}
   .appt-text h2{font-size:clamp(1.8rem,3.2vw,2.5rem); font-style:italic;}
   .appt-text p{margin-top:18px; color:#5c4a44; max-width:400px;}
-  .contact-row{margin-top:34px; font-size:0.9rem;}
-  .contact-row div{margin-bottom:10px; color:#5c4a44;}
+  .info-list{list-style:none; margin-top:34px; display:grid; gap:22px;}
+  .info-item{display:grid; grid-template-columns:40px 1fr; gap:14px; align-items:start;}
+  .info-icon{width:40px; height:40px; border-radius:50%; display:grid; place-items:center; border:1px solid rgba(176,141,87,0.6); color:var(--maroon); background:rgba(255,255,255,0.45);}
+  .info-icon svg{width:18px; height:18px;}
+  .info-label{font-size:0.7rem; letter-spacing:0.18em; color:var(--gold); text-transform:uppercase; margin-bottom:2px;}
+  .info-body{font-size:0.92rem; color:#5c4a44; line-height:1.55;}
+  .info-body a{color:var(--charcoal); border-bottom:1px solid transparent; transition:border-color .3s ease, color .3s ease;}
+  .info-body a:hover{color:var(--maroon); border-bottom-color:var(--maroon);}
+  .info-link{display:inline-block; margin-top:6px; font-size:0.72rem; letter-spacing:0.12em; color:var(--maroon) !important;}
+  .info-sep{color:var(--gold); margin:0 6px;}
+  .hours{display:grid; grid-template-columns:auto 1fr; gap:2px 18px;}
+  .hours .today{color:var(--maroon); font-weight:400;}
+
+  .branches{margin-top:70px; padding-top:44px; border-top:1px solid var(--maroon-soft);}
+  .branches h3{font-size:clamp(1.4rem,2.4vw,1.8rem); font-style:italic; margin-bottom:26px;}
+  .branch-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:18px;}
+  .branch-card{position:relative; background:var(--ivory); padding:26px 24px 24px; border:1px solid rgba(176,141,87,0.35); border-radius:0 0 22px 22px; border-top:2px solid var(--gold);}
+  .branch-card.main{background:var(--maroon-dark); color:var(--ivory); border-color:var(--maroon-dark); border-top-color:var(--gold);}
+  .branch-tag{display:inline-block; font-size:0.62rem; letter-spacing:0.2em; padding:4px 10px; border:1px solid var(--gold); color:var(--gold); border-radius:20px; margin-bottom:14px;}
+  .branch-card h4{font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:1.35rem;}
+  .branch-card p{font-size:0.86rem; margin-top:8px; color:#6b5750;}
+  .branch-card.main p{color:#E3CFC9;}
+  .branch-card a{display:inline-block; margin-top:14px; font-size:0.72rem; letter-spacing:0.12em; color:var(--maroon); border-bottom:1px solid currentColor;}
+  .branch-card.main a{color:var(--gold);}
   form{display:grid; gap:16px;}
   .form-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
   input,select,textarea{width:100%; background:transparent; border:none; border-bottom:1px solid #C9A79F; padding:12px 2px; font-family:'Jost',sans-serif; font-size:0.9rem; color:var(--charcoal);}
@@ -171,16 +224,22 @@
     .products-grid{grid-template-columns:repeat(2,1fr); gap:24px;}
     .why-grid{grid-template-columns:1fr; gap:32px;}
     .appt-wrap{grid-template-columns:1fr; gap:36px;}
+    .branch-grid{grid-template-columns:1fr;}
     .form-row{grid-template-columns:1fr;}
     .foot-grid{grid-template-columns:1fr 1fr; gap:30px;}
     section{padding:64px 0;}
   }
   @media (max-width:640px){
-    .brand{width:112px;}
-    .brand-badge{height:116px; padding:7px 11px 24px;}
-    .brand-badge::before{inset:0 4px 4px;}
-    .brand-badge::after{width:10px; height:10px; margin-left:-5px; bottom:-6px;}
-    header.is-scrolled .brand-badge{height:58px; padding:3px 7px 5px;}
+    .lb-top{padding:12px 16px; gap:12px;}
+    .lb-stage{padding:12px 8px;}
+    .lb-prev{left:8px;} .lb-next{right:8px;}
+    .lb-bottom{padding:10px 16px 18px;}
+    .lb-thumb{width:50px; height:50px;}
+    .brand{width:100px;}
+    .brand-badge{width:100px; height:131px;}
+    header.is-scrolled .brand-badge{transform:scale(0.56);}
+    .slide-copy{top:auto; bottom:44px; transform:none;}
+    .slide-copy .eyebrow{display:none;}
     .slide-copy p:not(.slide-title), .hero .btn-ghost{display:none;}
     .hero .btn-solid{padding:9px 16px; font-size:0.68rem;}
     .hero-prev, .hero-next{display:none;}
@@ -195,12 +254,43 @@
     .foot-grid{grid-template-columns:1fr;}
   }
 </style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"JewelryStore","name":"Rajesh Jewellery Mart","slogan":"Inspired by you",
+ "url":"https://rajeshjewellerymart.in","email":"hi@rajeshjewellerymart.in","telephone":["+91-9362320307","+91-8041490019"],
+ "address":{"@type":"PostalAddress","streetAddress":"iL 377, 5th Main Rd, Sector 6, HSR Layout","addressLocality":"Bengaluru","addressRegion":"Karnataka","postalCode":"560102","addressCountry":"IN"},
+ "openingHoursSpecification":[
+  {"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"10:00","closes":"20:00"},
+  {"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"10:00","closes":"21:00"},
+  {"@type":"OpeningHoursSpecification","dayOfWeek":"Sunday","opens":"11:00","closes":"18:00"}]}
+</script>
 </head>
 <body>
 
 <header>
   <div class="nav-row">
-    <a class="brand" href="#top"><span class="brand-badge"><img src="assets/logo.jpg" alt="Rajesh Jewellery Mart"></span></a>
+    <a class="brand" href="#top"><span class="brand-badge">
+      <svg class="badge-gem" viewBox="0 0 160 210" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="gemGold" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#F3E2B8"/><stop offset=".4" stop-color="#B08D57"/>
+            <stop offset=".65" stop-color="#E9D29E"/><stop offset="1" stop-color="#7E5E2F"/>
+          </linearGradient>
+          <linearGradient id="gemShine" gradientUnits="userSpaceOnUse" x1="-220" y1="0" x2="-60" y2="210">
+            <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+            <animate attributeName="x1" values="-220;260;260" keyTimes="0;.3;1" dur="6s" repeatCount="indefinite"/>
+            <animate attributeName="x2" values="-60;420;420" keyTimes="0;.3;1" dur="6s" repeatCount="indefinite"/>
+          </linearGradient>
+        </defs>
+        <path d="M26 0H134L160 30V130L80 210L0 130V30Z" fill="#fff"/>
+        <g fill="none" stroke="#B08D57" stroke-opacity=".45" stroke-width="1" vector-effect="non-scaling-stroke">
+          <path d="M30 6H130L154 33V127L80 201L6 127V33Z" vector-effect="non-scaling-stroke"/>
+          <path d="M15 136H145M43 136L80 201L117 136M80 136V201M24 136L80 201L136 136" vector-effect="non-scaling-stroke"/>
+        </g>
+        <path d="M26 0H134L160 30V130L80 210L0 130V30Z" fill="none" stroke="url(#gemGold)" stroke-width="2.5" vector-effect="non-scaling-stroke"/>
+        <path d="M26 0H134L160 30V130L80 210L0 130V30Z" fill="none" stroke="url(#gemShine)" stroke-width="2.5" vector-effect="non-scaling-stroke"/>
+      </svg>
+      <img src="assets/logo.jpg" alt="Rajesh Jewellery Mart">
+    </span></a>
     <nav><ul>
       <li><a href="#top">Home</a></li>
       <li><a href="#collections">Collections</a></li>
@@ -267,12 +357,12 @@
     </div>
   </div>
   <div class="coll-grid">
-    <div class="coll-card"><img src="assets/G1.jpeg" alt="Gold Jewellery" onerror="this.style.display='none'"><span>Gold Jewellery</span></div>
-    <div class="coll-card"><img src="assets/D1.jpeg" alt="Diamond Jewellery" onerror="this.style.display='none'"><span>Diamond Jewellery</span></div>
-    <div class="coll-card"><img src="assets/S1.jpeg" alt="Silver Jewellery" onerror="this.style.display='none'"><span>Silver Jewellery</span></div>
-    <div class="coll-card"><img src="assets/B1.jpeg" alt="Bridal Jewellery" onerror="this.style.display='none'"><span>Bridal Jewellery</span></div>
-    <div class="coll-card"><img src="assets/DW1.jpeg" alt="Daily Wear" onerror="this.style.display='none'"><span>Daily Wear</span></div>
-    <div class="coll-card"><img src="assets/T1.jpeg" alt="Traditional Jewellery" onerror="this.style.display='none'"><span>Traditional Jewellery</span></div>
+    <button class="coll-card" type="button" data-gallery="gold"><img src="assets/G1.jpeg" alt="" onerror="this.style.display='none'"><span>Gold Jewellery</span><small class="coll-hint">VIEW ALL PHOTOS →</small></button>
+    <button class="coll-card" type="button" data-gallery="diamond"><img src="assets/D1.jpeg" alt="" onerror="this.style.display='none'"><span>Diamond Jewellery</span><small class="coll-hint">VIEW ALL PHOTOS →</small></button>
+    <button class="coll-card" type="button" data-gallery="silver"><img src="assets/S1.jpeg" alt="" onerror="this.style.display='none'"><span>Silver Jewellery</span><small class="coll-hint">VIEW ALL PHOTOS →</small></button>
+    <button class="coll-card" type="button" data-gallery="bridal"><img src="assets/B1.jpeg" alt="" onerror="this.style.display='none'"><span>Bridal Jewellery</span><small class="coll-hint">VIEW ALL PHOTOS →</small></button>
+    <button class="coll-card" type="button" data-gallery="dailywear"><img src="assets/DW1.jpeg" alt="" onerror="this.style.display='none'"><span>Daily Wear</span><small class="coll-hint">VIEW ALL PHOTOS →</small></button>
+    <button class="coll-card" type="button" data-gallery="traditional"><img src="assets/T1.jpeg" alt="" onerror="this.style.display='none'"><span>Traditional Jewellery</span><small class="coll-hint">VIEW ALL PHOTOS →</small></button>
   </div>
 
   <div class="wrap" style="margin-top:60px;">
@@ -300,25 +390,25 @@
     </div>
     <div class="products-grid">
       <div class="product-card">
-        <div class="product-frame"><img src="assets/CLN1.jpeg" alt="Classic Lakshmi Necklace" onerror="this.parentElement.classList.add('ph-fallback')"></div>
+        <button class="product-frame" type="button" data-gallery="cln" aria-label="View all photos of Classic Lakshmi Necklace"><img src="assets/CLN1.jpeg" alt="Classic Lakshmi Necklace" onerror="this.parentElement.classList.add('ph-fallback')"><span class="photo-count"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="4" width="13" height="9.5" rx="1.5"/><circle cx="8" cy="8.7" r="2.6"/><path d="M5.5 4 6.6 2.5h2.8L10.5 4"/></svg>5 PHOTOS</span></button>
         <div class="product-name">Classic Lakshmi Necklace</div>
         <div class="product-meta">Gold · Traditional</div>
         <div class="product-price">Enquire for Price</div>
       </div>
       <div class="product-card">
-        <div class="product-frame"><img src="assets/EDN1.jpeg" alt="Elegant Diamond Necklace" onerror="this.parentElement.classList.add('ph-fallback')"></div>
+        <button class="product-frame" type="button" data-gallery="edn" aria-label="View all photos of Elegant Diamond Necklace"><img src="assets/EDN1.jpeg" alt="Elegant Diamond Necklace" onerror="this.parentElement.classList.add('ph-fallback')"><span class="photo-count"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="4" width="13" height="9.5" rx="1.5"/><circle cx="8" cy="8.7" r="2.6"/><path d="M5.5 4 6.6 2.5h2.8L10.5 4"/></svg>5 PHOTOS</span></button>
         <div class="product-name">Elegant Diamond Necklace</div>
         <div class="product-meta">Diamond</div>
         <div class="product-price">Enquire for Price</div>
       </div>
       <div class="product-card">
-        <div class="product-frame"><img src="assets/TGJ1.jpeg" alt="Temple Gold Jhumka" onerror="this.parentElement.classList.add('ph-fallback')"></div>
+        <button class="product-frame" type="button" data-gallery="tgj" aria-label="View all photos of Temple Gold Jhumka"><img src="assets/TGJ1.jpeg" alt="Temple Gold Jhumka" onerror="this.parentElement.classList.add('ph-fallback')"><span class="photo-count"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="4" width="13" height="9.5" rx="1.5"/><circle cx="8" cy="8.7" r="2.6"/><path d="M5.5 4 6.6 2.5h2.8L10.5 4"/></svg>5 PHOTOS</span></button>
         <div class="product-name">Temple Gold Jhumka</div>
         <div class="product-meta">Gold · Temple Design</div>
         <div class="product-price">Enquire for Price</div>
       </div>
       <div class="product-card">
-        <div class="product-frame"><img src="assets/PSA1.jpeg" alt="Premium Silver Anklets" onerror="this.parentElement.classList.add('ph-fallback')"></div>
+        <button class="product-frame" type="button" data-gallery="psa" aria-label="View all photos of Premium Silver Anklets"><img src="assets/PSA1.jpeg" alt="Premium Silver Anklets" onerror="this.parentElement.classList.add('ph-fallback')"><span class="photo-count"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="4" width="13" height="9.5" rx="1.5"/><circle cx="8" cy="8.7" r="2.6"/><path d="M5.5 4 6.6 2.5h2.8L10.5 4"/></svg>5 PHOTOS</span></button>
         <div class="product-name">Premium Silver Anklets</div>
         <div class="product-meta">Silver</div>
         <div class="product-price">Enquire for Price</div>
@@ -351,11 +441,42 @@
       <span class="eyebrow" style="color:var(--maroon); font-size:0.75rem; letter-spacing:0.28em;">VISIT OR ENQUIRE</span>
       <h2>Book an appointment</h2>
       <p>Visit our showroom or reserve a private consultation with our jewellery specialists.</p>
-      <div class="contact-row">
-        <div>Showroom: <span class="placeholder-note">[Add address]</span></div>
-        <div>Phone: <span class="placeholder-note">[Add phone number]</span></div>
-        <div>WhatsApp: <span class="placeholder-note">[Add WhatsApp number]</span></div>
-      </div>
+      <ul class="info-list">
+        <li class="info-item">
+          <span class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+          <div class="info-body">
+            <div class="info-label">Main Showroom</div>
+            <address style="font-style:normal;">iL 377, 5th Main Rd, Sector 6,<br>HSR Layout, Bengaluru,<br>Karnataka – 560102</address>
+            <a class="info-link" href="https://www.google.com/maps/search/?api=1&amp;query=Rajesh+Jewellery+Mart+5th+Main+Rd+Sector+6+HSR+Layout+Bengaluru+560102" target="_blank" rel="noopener">GET DIRECTIONS →</a>
+          </div>
+        </li>
+        <li class="info-item">
+          <span class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 3.5h3.2l1.6 4.2-2 1.3a11 11 0 0 0 5.2 5.2l1.3-2 4.2 1.6V17a2.5 2.5 0 0 1-2.5 2.5A15.5 15.5 0 0 1 2.5 6 2.5 2.5 0 0 1 5 3.5z"/></svg></span>
+          <div class="info-body">
+            <div class="info-label">Call / WhatsApp</div>
+            <a href="tel:+919362320307">+91 93623 20307</a><span class="info-sep">·</span><a href="https://wa.me/919362320307" target="_blank" rel="noopener">WhatsApp</a><br>
+            <a href="tel:+918041490019">+91 80 4149 0019</a>
+          </div>
+        </li>
+        <li class="info-item">
+          <span class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></span>
+          <div class="info-body">
+            <div class="info-label">Email</div>
+            <a href="mailto:hi@rajeshjewellerymart.in">hi@rajeshjewellerymart.in</a>
+          </div>
+        </li>
+        <li class="info-item">
+          <span class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span>
+          <div class="info-body">
+            <div class="info-label">Store Hours</div>
+            <div class="hours">
+              <span data-days="1-5">Mon – Fri</span><span data-days="1-5">10:00 AM – 8:00 PM</span>
+              <span data-days="6">Saturday</span><span data-days="6">10:00 AM – 9:00 PM</span>
+              <span data-days="0">Sunday</span><span data-days="0">11:00 AM – 6:00 PM</span>
+            </div>
+          </div>
+        </li>
+      </ul>
     </div>
     <form onsubmit="event.preventDefault(); this.querySelector('.submit-btn').textContent='Request Sent';">
       <div class="form-row">
@@ -364,14 +485,59 @@
       </div>
       <input type="email" placeholder="Email">
       <div class="form-row">
-        <select><option>Preferred Branch</option></select>
+        <select required><option value="" disabled selected>Preferred Branch</option><option>HSR Layout, Bengaluru (Main)</option><option>Kanakapura</option><option>Hosur</option></select>
         <input type="date">
       </div>
       <textarea placeholder="Message"></textarea>
       <button class="btn-outline submit-btn" type="submit" style="cursor:pointer;">Book an Appointment</button>
     </form>
   </div>
+
+  <div class="wrap branches">
+    <span class="eyebrow" style="color:var(--maroon); font-size:0.75rem; letter-spacing:0.28em; margin-bottom:12px;">OUR BRANCHES</span>
+    <h3>Three showrooms, one legacy of trust</h3>
+    <div class="branch-grid">
+      <div class="branch-card main">
+        <span class="branch-tag">MAIN BRANCH</span>
+        <h4>HSR Layout, Bengaluru</h4>
+        <p>iL 377, 5th Main Rd, Sector 6, HSR Layout, Bengaluru, Karnataka – 560102</p>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=Rajesh+Jewellery+Mart+5th+Main+Rd+Sector+6+HSR+Layout+Bengaluru+560102" target="_blank" rel="noopener">GET DIRECTIONS →</a>
+      </div>
+      <div class="branch-card">
+        <span class="branch-tag">BRANCH</span>
+        <h4>Kanakapura</h4>
+        <p>Karnataka. Call us for the showroom address and timings.</p>
+        <a href="tel:+919362320307">CALL +91 93623 20307</a>
+      </div>
+      <div class="branch-card">
+        <span class="branch-tag">BRANCH</span>
+        <h4>Hosur</h4>
+        <p>Tamil Nadu. Call us for the showroom address and timings.</p>
+        <a href="tel:+919362320307">CALL +91 93623 20307</a>
+      </div>
+    </div>
+  </div>
 </section>
+
+<dialog class="lb" aria-labelledby="lb-title">
+  <div class="lb-top">
+    <div>
+      <span class="eyebrow">RAJESH JEWELLERY MART</span>
+      <h3 class="lb-title" id="lb-title"></h3>
+    </div>
+    <span class="lb-count" aria-live="polite"></span>
+    <button class="hero-btn lb-close" type="button" aria-label="Close gallery"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3.5 3.5 9 9m0-9-9 9"/></svg></button>
+  </div>
+  <div class="lb-stage">
+    <img class="lb-img" alt="">
+    <button class="hero-btn lb-prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3 5 8l5 5"/></svg></button>
+    <button class="hero-btn lb-next" type="button" aria-label="Next photo"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 3 5 5-5 5"/></svg></button>
+  </div>
+  <div class="lb-bottom">
+    <div class="lb-thumbs"></div>
+    <a class="btn-solid lb-enquire" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"/></svg>Enquire on WhatsApp</a>
+  </div>
+</dialog>
 
 <footer>
   <div class="wrap">
@@ -386,40 +552,161 @@
       </div>
       <div class="foot-col">
         <h4>JEWELLERY</h4>
-        <ul><li><a href="#featured">Gold</a></li><li><a href="#featured">Silver</a></li><li><a href="#featured">Diamond</a></li><li><a href="#featured">Bridal</a></li></ul>
+        <ul><li><a href="#collections" data-gallery="gold">Gold</a></li><li><a href="#collections" data-gallery="silver">Silver</a></li><li><a href="#collections" data-gallery="diamond">Diamond</a></li><li><a href="#collections" data-gallery="bridal">Bridal</a></li></ul>
       </div>
       <div class="foot-col">
-        <h4>SUPPORT</h4>
-        <ul><li><a href="#appointment">Contact Us</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms & Conditions</a></li></ul>
+        <h4>VISIT US</h4>
+        <ul>
+          <li>HSR Layout, Bengaluru (Main)</li>
+          <li>Kanakapura · Hosur</li>
+          <li><a href="tel:+919362320307">+91 93623 20307</a></li>
+          <li><a href="mailto:hi@rajeshjewellerymart.in">hi@rajeshjewellerymart.in</a></li>
+        </ul>
       </div>
     </div>
     <div class="foot-bottom">
       <span>© Rajesh Jewellery Mart. All Rights Reserved.</span>
-      <span class="placeholder-note">Instagram · Facebook · WhatsApp — add links</span>
+      <span><a href="https://wa.me/919362320307" target="_blank" rel="noopener">WhatsApp</a> · <span class="placeholder-note">Instagram · Facebook — add links</span></span>
     </div>
   </div>
 </footer>
 
 <script>
-  // Builds each gallery strip from the assets/ naming convention.
+  // Every photo set on the site, keyed by the data-gallery attribute that opens it.
+  // Files follow the assets/ naming convention: assets/<prefix><n>.jpeg
+  const GALLERIES = {
+    gold:        {title:'Gold Jewellery',           prefix:'G',   count:10},
+    diamond:     {title:'Diamond Jewellery',        prefix:'D',   count:10},
+    silver:      {title:'Silver Jewellery',         prefix:'S',   count:10},
+    bridal:      {title:'Bridal Jewellery',         prefix:'B',   count:10},
+    traditional: {title:'Traditional Jewellery',    prefix:'T',   count:10},
+    dailywear:   {title:'Daily Wear',               prefix:'DW',  count:10},
+    cln:         {title:'Classic Lakshmi Necklace', prefix:'CLN', count:5},
+    edn:         {title:'Elegant Diamond Necklace', prefix:'EDN', count:5},
+    tgj:         {title:'Temple Gold Jhumka',       prefix:'TGJ', count:5},
+    psa:         {title:'Premium Silver Anklets',   prefix:'PSA', count:5},
+  };
+  const galleryPhotos = key => Array.from({length: GALLERIES[key].count}, (_, i) => `assets/${GALLERIES[key].prefix}${i + 1}.jpeg`);
+
+  // Builds each gallery strip; each thumbnail opens the lightbox at that photo.
   // Missing files are simply skipped (no broken-image icons).
-  function buildStrip(id, prefix, count, ext){
+  function buildStrip(id, key){
     const el = document.getElementById(id);
-    for(let i=1;i<=count;i++){
+    galleryPhotos(key).forEach((src, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'strip-item';
+      b.dataset.gallery = key;
+      b.dataset.index = i;
+      b.setAttribute('aria-label', `${GALLERIES[key].title}, photo ${i + 1}`);
       const img = document.createElement('img');
-      img.src = `assets/${prefix}${i}.${ext}`;
-      img.alt = `${prefix}${i}`;
+      img.src = src;
+      img.alt = '';
       img.loading = 'lazy';
-      img.onerror = function(){ this.remove(); };
-      el.appendChild(img);
-    }
+      img.onerror = () => b.remove();
+      b.appendChild(img);
+      el.appendChild(b);
+    });
   }
-  buildStrip('gold-strip','G',10,'jpeg');
-  buildStrip('diamond-strip','D',10,'jpeg');
-  buildStrip('silver-strip','S',10,'jpeg');
-  buildStrip('bridal-strip','B',10,'jpeg');
-  buildStrip('traditional-strip','T',10,'jpeg');
-  buildStrip('dailywear-strip','DW',10,'jpeg');
+  buildStrip('gold-strip','gold');
+  buildStrip('diamond-strip','diamond');
+  buildStrip('silver-strip','silver');
+  buildStrip('bridal-strip','bridal');
+  buildStrip('traditional-strip','traditional');
+  buildStrip('dailywear-strip','dailywear');
+
+  // Lightbox: shows every photo of a category or product.
+  (function(){
+    const lb = document.querySelector('.lb');
+    const img = lb.querySelector('.lb-img');
+    const title = lb.querySelector('.lb-title');
+    const count = lb.querySelector('.lb-count');
+    const thumbs = lb.querySelector('.lb-thumbs');
+    const stage = lb.querySelector('.lb-stage');
+    const enquire = lb.querySelector('.lb-enquire');
+    let key = null, photos = [], idx = 0, missing = new Set();
+
+    const available = () => photos.map((_, i) => i).filter(i => !missing.has(i));
+
+    function open(k, start){
+      key = k; photos = galleryPhotos(k); missing = new Set();
+      title.textContent = GALLERIES[k].title;
+      thumbs.innerHTML = '';
+      photos.forEach((src, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'lb-thumb';
+        b.setAttribute('aria-label', `Show photo ${i + 1}`);
+        const t = document.createElement('img');
+        t.src = src; t.alt = ''; t.loading = 'lazy';
+        t.onerror = () => { missing.add(i); b.hidden = true; if (i === idx) step(1); else updateCount(); };
+        b.appendChild(t);
+        b.addEventListener('click', () => show(i));
+        thumbs.appendChild(b);
+      });
+      document.documentElement.classList.add('lb-open');
+      lb.showModal();
+      show(start);
+    }
+
+    function updateCount(){
+      const av = available();
+      count.textContent = `${Math.max(av.indexOf(idx), 0) + 1} / ${av.length}`;
+    }
+
+    function show(i){
+      idx = i;
+      const src = photos[i];
+      img.classList.add('is-loading');
+      img.alt = `${GALLERIES[key].title}, photo ${i + 1}`;
+      img.src = src;
+      if (img.complete && img.naturalWidth) img.classList.remove('is-loading');
+      [...thumbs.children].forEach((b, n) => b.setAttribute('aria-current', n === i ? 'true' : 'false'));
+      const t = thumbs.children[i];
+      thumbs.scrollTo({left: t.offsetLeft - thumbs.clientWidth / 2 + t.offsetWidth / 2, behavior: 'smooth'});
+      updateCount();
+      const url = new URL(src, location.href).href;
+      enquire.href = 'https://wa.me/919362320307?text=' + encodeURIComponent(
+        `Hi Rajesh Jewellery Mart, I'm interested in this piece from your ${GALLERIES[key].title} collection (photo ${i + 1}): ${url}`);
+      // Preload neighbours so next/previous feel instant.
+      [1, -1].forEach(d => { new Image().src = photos[(i + d + photos.length) % photos.length]; });
+    }
+
+    function step(d){
+      const av = available();
+      if (!av.length) { lb.close(); return; }
+      const pos = av.indexOf(idx);
+      show(av[pos === -1 ? 0 : (pos + d + av.length) % av.length]);
+    }
+
+    img.addEventListener('load', () => img.classList.remove('is-loading'));
+    img.addEventListener('error', () => { missing.add(idx); if (thumbs.children[idx]) thumbs.children[idx].hidden = true; step(1); });
+    lb.querySelector('.lb-prev').addEventListener('click', () => step(-1));
+    lb.querySelector('.lb-next').addEventListener('click', () => step(1));
+    lb.querySelector('.lb-close').addEventListener('click', () => lb.close());
+    lb.addEventListener('close', () => document.documentElement.classList.remove('lb-open'));
+    lb.addEventListener('click', e => { if (e.target === lb || e.target === stage) lb.close(); });
+    lb.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') step(-1);
+      if (e.key === 'ArrowRight') step(1);
+    });
+
+    let startX = null, startY = 0;
+    stage.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, {passive:true});
+    stage.addEventListener('touchend', e => {
+      if (startX === null) return;
+      const dx = e.changedTouches[0].clientX - startX, dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
+      startX = null;
+    });
+
+    document.addEventListener('click', e => {
+      const trigger = e.target.closest('[data-gallery]');
+      if (!trigger || lb.contains(trigger)) return;
+      e.preventDefault();
+      open(trigger.dataset.gallery, Number(trigger.dataset.index || 0));
+    });
+  })();
 
   // Tuck the hanging logo badge back into the header once the page scrolls.
   (function(){
@@ -427,6 +714,16 @@
     const update = () => header.classList.toggle('is-scrolled', window.scrollY > 40);
     window.addEventListener('scroll', update, {passive:true});
     update();
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) header.querySelector('.badge-gem').pauseAnimations();
+  })();
+
+  // Highlight today's row in the store hours.
+  (function(){
+    const d = new Date().getDay();
+    document.querySelectorAll('.hours [data-days]').forEach(el => {
+      const [a, b = a] = el.dataset.days.split('-').map(Number);
+      if (d >= a && d <= b) el.classList.add('today');
+    });
   })();
 
   // Hero banner slider. Auto-advance is driven by the active dot's progress
