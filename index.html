@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rajesh Jewellery Mart | Premium Gold & Silver Jewellery</title>
+<meta name="description" content="Rajesh Jewellery Mart — inspired by you. Exquisite gold, silver and diamond jewellery crafted with trust and timeless artistry.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon:#7A1B27; --maroon-dark:#4E1219; --maroon-soft:rgba(122,27,39,0.35);
+    --ivory:#FBF7F0; --cream:#EFE4D3; --charcoal:#221E1B; --gold:#B08D57;
+  }
+  html{scroll-behavior:smooth; scroll-padding-top: env(safe-area-inset-top,0px);}
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Jost',sans-serif; color:var(--charcoal); background:var(--ivory);
+    font-weight:300; line-height:1.6; overflow-x:hidden;
+    padding-top: env(safe-area-inset-top,0px); padding-bottom: env(safe-area-inset-bottom,0px);
+  }
+  h1,h2,h3{font-family:'Cormorant Garamond',serif; font-weight:500; letter-spacing:0.01em;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+  img,svg{max-width:100%; display:block;}
+  .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;}
+  img.ph-fallback{object-fit:cover; background:linear-gradient(135deg,var(--cream),#ddd0b8);}
+
+  /* HEADER */
+  header{position:sticky; top:env(safe-area-inset-top,0px); z-index:100; background:rgba(251,247,240,0.94); backdrop-filter:blur(10px); border-bottom:1px solid var(--maroon-soft);}
+  .nav-row{display:flex; align-items:center; justify-content:space-between; padding:10px 32px; max-width:1180px; margin:0 auto;}
+  /* Logo badge hangs from the top of the header; its lower half overlaps the hero.
+     Header is 73px tall, so a 146px badge starting at the header top is exactly half over. */
+  .brand{position:relative; width:156px; height:52px; flex:0 0 auto;}
+  /* Pendant shape: flat top, U-curved bottom, gold gradient rim, inner hairline and a gold diamond at the tip. */
+  .brand-badge{position:absolute; left:0; top:-10px; height:156px; padding:10px 16px 32px;
+    border:2px solid transparent; border-top:0; border-radius:0 0 50% 50% / 0 0 36% 36%;
+    background:linear-gradient(#fff,#fff) padding-box, linear-gradient(165deg,#EBD6A8 0%,#B08D57 45%,#7E5E2F 100%) border-box;
+    box-shadow:0 16px 34px rgba(20,7,9,0.32), 0 2px 6px rgba(20,7,9,0.12);
+    transition:height .4s ease, padding .4s ease, border-radius .4s ease, box-shadow .4s ease;}
+  .brand-badge::before{content:''; position:absolute; inset:0 6px 6px; border:1px solid rgba(176,141,87,0.55); border-top:0; border-radius:inherit; pointer-events:none; transition:opacity .3s ease;}
+  .brand-badge::after{content:''; position:absolute; left:50%; bottom:-7px; width:12px; height:12px; margin-left:-6px; transform:rotate(45deg); background:linear-gradient(135deg,#EBD6A8,#B08D57 55%,#7E5E2F); box-shadow:0 0 0 3px #fff, 0 3px 8px rgba(20,7,9,0.3); transition:opacity .3s ease;}
+  .brand-badge img{position:relative; height:100%; width:auto;}
+  header.is-scrolled .brand-badge{height:62px; top:-5px; padding:4px 10px 6px; border-radius:0 0 14px 14px / 0 0 14px 14px; box-shadow:0 4px 12px rgba(20,7,9,0.12);}
+  header.is-scrolled .brand-badge::before, header.is-scrolled .brand-badge::after{opacity:0;}
+  nav ul{list-style:none; display:flex; gap:30px; font-size:0.82rem; letter-spacing:0.06em;}
+  nav a{position:relative; padding-bottom:4px;}
+  nav a::after{content:''; position:absolute; left:0; right:100%; bottom:0; height:1px; background:var(--maroon); transition:right .35s ease;}
+  nav a:hover::after{right:0;}
+  .nav-actions{display:flex; align-items:center; gap:18px;}
+  .btn-outline{border:1px solid var(--maroon); color:var(--maroon); padding:10px 22px; font-size:0.78rem; letter-spacing:0.08em; transition:all .3s ease;}
+  .btn-outline:hover{background:var(--maroon); color:var(--ivory);}
+  .icon-btn{width:20px; height:20px; opacity:0.75; cursor:pointer; color:var(--charcoal);}
+  .hamburger{display:none; flex-direction:column; gap:5px; cursor:pointer;}
+  .hamburger span{width:24px; height:1px; background:var(--charcoal);}
+
+  /* HERO SLIDER */
+  .hero{position:relative; padding:0; overflow:hidden; background:var(--maroon-dark); color:var(--ivory); container-type:inline-size;}
+  .hero-track{position:relative; width:100%; aspect-ratio:1672/941; max-height:calc(100vh - 73px); max-height:calc(100svh - 73px); touch-action:pan-y;}
+  .hero-slide{position:absolute; inset:0; opacity:0; visibility:hidden; transition:opacity 1.2s ease, visibility 0s 1.2s;}
+  .hero-slide.is-active{opacity:1; visibility:visible; z-index:1; transition:opacity 1.2s ease, visibility 0s;}
+  .hero-slide img{width:100%; height:100%; object-fit:cover; object-position:center 40%; transform:scale(1.07); transition:transform 8s ease-out;}
+  .hero-slide.is-active img{transform:scale(1);}
+  .hero-link{position:absolute; inset:0; z-index:2;}
+  .hero-slide::after{content:''; position:absolute; inset:auto 0 0 0; height:22%; background:linear-gradient(0deg, rgba(20,7,9,0.45), transparent); pointer-events:none;}
+
+  .slide-copy{position:absolute; z-index:3; left:7cqw; top:50%; transform:translateY(-50%); width:min(42cqw, 560px);}
+  .slide-copy > *{opacity:0; transform:translateY(18px); transition:opacity .9s ease, transform .9s ease;}
+  .is-active .slide-copy > *{opacity:1; transform:none;}
+  .is-active .slide-copy > :nth-child(2){transition-delay:.15s;}
+  .is-active .slide-copy > :nth-child(3){transition-delay:.3s;}
+  .is-active .slide-copy > :nth-child(4){transition-delay:.45s;}
+  .eyebrow{font-size:0.75rem; letter-spacing:0.28em; color:var(--gold); margin-bottom:22px; display:block;}
+  .hero .eyebrow{font-size:clamp(0.52rem, 0.95cqw, 0.75rem); margin-bottom:clamp(8px, 1.6cqw, 22px);}
+  .slide-title{font-family:'Cormorant Garamond',serif; font-size:clamp(1.15rem, 4.2cqw, 3.8rem); line-height:1.08; font-style:italic; font-weight:500;}
+  .slide-copy p:not(.slide-title){margin-top:clamp(10px, 1.8cqw, 24px); font-size:clamp(0.8rem, 1.15cqw, 1.02rem); color:#E9D9D2; max-width:440px;}
+  .hero-cta{display:flex; gap:clamp(10px, 1.2cqw, 16px); margin-top:clamp(14px, 2.8cqw, 38px); flex-wrap:wrap;}
+
+  .hero-controls{position:absolute; z-index:4; left:4cqw; right:4cqw; bottom:clamp(12px, 3cqw, 36px); display:flex; align-items:center; justify-content:space-between; pointer-events:none;}
+  .hero-controls > *{pointer-events:auto;}
+  .hero-dots{display:flex; gap:10px;}
+  .hero-dot{position:relative; width:26px; height:24px; background:none; border:0; cursor:pointer; transition:width .4s ease;}
+  .hero-dot::before{content:''; position:absolute; left:0; right:0; top:50%; height:2px; margin-top:-1px; background:rgba(251,247,240,0.4);}
+  .hero-dot.is-active{width:54px;}
+  .hero-dot .fill{position:absolute; left:0; top:50%; height:2px; margin-top:-1px; width:0; background:var(--gold);}
+  .hero-dot.is-active .fill{animation:heroFill var(--interval, 6000ms) linear forwards;}
+  .hero.is-paused .hero-dot.is-active .fill, .hero.is-hover .hero-dot.is-active .fill, .hero.is-hidden .hero-dot.is-active .fill{animation-play-state:paused;}
+  @keyframes heroFill{from{width:0;} to{width:100%;}}
+  .hero-arrows{display:flex; gap:10px;}
+  .hero-btn{width:44px; height:44px; border-radius:50%; display:grid; place-items:center; cursor:pointer; color:var(--ivory); background:rgba(20,7,9,0.35); border:1px solid rgba(176,141,87,0.55); backdrop-filter:blur(6px); transition:background .3s ease, border-color .3s ease, color .3s ease;}
+  .hero-btn:hover{background:var(--gold); border-color:var(--gold); color:var(--maroon-dark);}
+  .hero-btn svg{width:16px; height:16px;}
+  .hero-btn:focus-visible, .hero-dot:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+  .hero-toggle .i-play{display:none;}
+  .hero.is-paused .hero-toggle .i-play{display:block;}
+  .hero.is-paused .hero-toggle .i-pause{display:none;}
+  @media (prefers-reduced-motion: reduce){
+    .hero-slide, .hero-slide img, .slide-copy > *{transition:none !important;}
+    .hero-slide img{transform:none;}
+  }
+  .btn-solid{background:var(--gold); color:var(--maroon-dark); padding:14px 30px; font-size:0.8rem; letter-spacing:0.08em; transition:all .3s ease;}
+  .btn-solid:hover{background:var(--ivory);}
+  .btn-ghost{border:1px solid rgba(251,247,240,0.4); color:var(--ivory); padding:14px 30px; font-size:0.8rem; letter-spacing:0.08em; transition:all .3s ease;}
+  .btn-ghost:hover{border-color:var(--gold); color:var(--gold);}
+
+  section{padding:100px 0;}
+  .section-head{max-width:600px; margin-bottom:50px;}
+  .section-head .eyebrow{color:var(--maroon);}
+  .section-head h2{font-size:clamp(1.8rem,3.4vw,2.6rem); font-style:italic;}
+  .rule{width:52px; height:1px; background:var(--maroon); margin:18px 0 0;}
+
+  /* COLLECTIONS */
+  .collections{background:var(--cream);}
+  .coll-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--maroon-soft);}
+  .coll-card{position:relative; aspect-ratio:3/4; overflow:hidden; background:var(--maroon-dark); display:flex; align-items:flex-end; padding:26px;}
+  .coll-card img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .6s ease;}
+  .coll-card:hover img{transform:scale(1.06);}
+  .coll-card span{position:relative; z-index:2; color:var(--ivory); font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-style:italic;}
+  .coll-card::before{content:''; position:absolute; inset:0; background:linear-gradient(0deg, rgba(20,7,9,0.6), transparent 55%); z-index:1;}
+
+  /* STRIP GALLERY */
+  .strip{display:flex; gap:12px; overflow-x:auto; padding:6px 0 16px; scrollbar-width:thin;}
+  .strip img{width:110px; height:110px; object-fit:cover; flex:0 0 auto; border:1px solid var(--maroon-soft);}
+
+  /* FEATURED PRODUCTS */
+  .products-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:34px;}
+  .product-frame{aspect-ratio:1/1.15; background:var(--cream); position:relative; overflow:hidden; margin-bottom:16px;}
+  .product-frame img{width:100%; height:100%; object-fit:cover;}
+  .product-name{font-family:'Cormorant Garamond',serif; font-size:1.15rem; font-style:italic;}
+  .product-meta{font-size:0.75rem; letter-spacing:0.05em; color:#8a6a5e; margin-top:4px;}
+  .product-price{font-size:0.85rem; margin-top:10px; color:var(--charcoal);}
+
+  /* WHY US */
+  .why{background:var(--maroon-dark); color:var(--ivory);}
+  .why .section-head h2{color:var(--ivory);}
+  .why .section-head .eyebrow{color:var(--gold);}
+  .why-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:44px 40px;}
+  .why-item .num{font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--gold); font-size:1.1rem;}
+  .why-item h3{font-size:1.25rem; margin-top:10px; margin-bottom:8px; font-style:italic;}
+  .why-item p{font-size:0.9rem; color:#D9C6C2;}
+
+  /* APPOINTMENT */
+  .appointment{background:var(--cream);}
+  .appt-wrap{display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start;}
+  .appt-text h2{font-size:clamp(1.8rem,3.2vw,2.5rem); font-style:italic;}
+  .appt-text p{margin-top:18px; color:#5c4a44; max-width:400px;}
+  .contact-row{margin-top:34px; font-size:0.9rem;}
+  .contact-row div{margin-bottom:10px; color:#5c4a44;}
+  form{display:grid; gap:16px;}
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  input,select,textarea{width:100%; background:transparent; border:none; border-bottom:1px solid #C9A79F; padding:12px 2px; font-family:'Jost',sans-serif; font-size:0.9rem; color:var(--charcoal);}
+  input:focus,select:focus,textarea:focus{outline:none; border-color:var(--maroon);}
+  ::placeholder{color:#9b7f77;}
+  textarea{resize:vertical; min-height:70px;}
+
+  footer{background:var(--maroon-dark); color:#D9C0BA; padding:70px 0 30px;}
+  .foot-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; padding-bottom:50px; border-bottom:1px solid rgba(255,255,255,0.1);}
+  .foot-brand img{height:60px; margin-bottom:14px;}
+  .foot-brand p{font-size:0.85rem; max-width:260px;}
+  .foot-col h4{color:var(--ivory); font-size:0.78rem; letter-spacing:0.1em; margin-bottom:16px; font-family:'Jost',sans-serif; font-weight:400;}
+  .foot-col ul{list-style:none; display:grid; gap:10px; font-size:0.85rem;}
+  .foot-col a:hover{color:var(--gold);}
+  .foot-bottom{padding-top:24px; font-size:0.78rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+  .placeholder-note{color:var(--gold); font-size:0.7rem;}
+
+  @media (max-width:880px){
+    nav ul, .nav-actions .btn-outline{display:none;}
+    .hamburger{display:flex;}
+    .coll-grid{grid-template-columns:repeat(2,1fr);}
+    .products-grid{grid-template-columns:repeat(2,1fr); gap:24px;}
+    .why-grid{grid-template-columns:1fr; gap:32px;}
+    .appt-wrap{grid-template-columns:1fr; gap:36px;}
+    .form-row{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr 1fr; gap:30px;}
+    section{padding:64px 0;}
+  }
+  @media (max-width:640px){
+    .brand{width:112px;}
+    .brand-badge{height:116px; padding:7px 11px 24px;}
+    .brand-badge::before{inset:0 4px 4px;}
+    .brand-badge::after{width:10px; height:10px; margin-left:-5px; bottom:-6px;}
+    header.is-scrolled .brand-badge{height:58px; padding:3px 7px 5px;}
+    .slide-copy p:not(.slide-title), .hero .btn-ghost{display:none;}
+    .hero .btn-solid{padding:9px 16px; font-size:0.68rem;}
+    .hero-prev, .hero-next{display:none;}
+    .hero-btn{width:34px; height:34px;}
+    .hero-btn svg{width:13px; height:13px;}
+    .hero-dot{width:18px;}
+    .hero-dot.is-active{width:36px;}
+  }
+  @media (max-width:480px){
+    .coll-grid{grid-template-columns:1fr;}
+    .products-grid{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-row">
+    <a class="brand" href="#top"><span class="brand-badge"><img src="assets/logo.jpg" alt="Rajesh Jewellery Mart"></span></a>
+    <nav><ul>
+      <li><a href="#top">Home</a></li>
+      <li><a href="#collections">Collections</a></li>
+      <li><a href="#featured">Featured</a></li>
+      <li><a href="#why">About</a></li>
+      <li><a href="#appointment">Contact</a></li>
+    </ul></nav>
+    <div class="nav-actions">
+      <svg class="icon-btn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.6" y2="16.6"/></svg>
+      <svg class="icon-btn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s-7.5-4.6-10-9.3C.5 8 2.4 4.5 6 4.5c2 0 3.4 1.1 4 2.3.6-1.2 2-2.3 4-2.3 3.6 0 5.5 3.5 4 7.2C19.5 16.4 12 21 12 21z"/></svg>
+      <a class="btn-outline" href="#appointment">Book Appointment</a>
+      <div class="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top" aria-roledescription="carousel" aria-label="Rajesh Jewellery Mart highlights">
+  <h1 class="sr-only">Rajesh Jewellery Mart — Premium Gold, Diamond &amp; Silver Jewellery</h1>
+  <div class="hero-track" aria-live="off">
+    <div class="hero-slide is-active" role="group" aria-roledescription="slide" aria-label="1 of 4">
+      <img src="assets/banner1.png" alt="Rajesh Jewellery Mart — Trust, Tradition, Timeless Beauty. More than jewellery… it's a legacy. A bride in a maroon silk saree wearing a gold temple necklace and jhumkas." fetchpriority="high" decoding="async">
+      <a class="hero-link" href="#collections" aria-label="Explore our collections"></a>
+    </div>
+    <div class="hero-slide" role="group" aria-roledescription="slide" aria-label="2 of 4">
+      <img src="assets/banner2.png" alt="A woman in a maroon silk saree wearing an antique gold Lakshmi necklace, jhumkas and bangles." loading="lazy" decoding="async">
+      <div class="slide-copy">
+        <span class="eyebrow">RAJESH JEWELLERY MART · INSPIRED BY YOU</span>
+        <p class="slide-title">Timeless elegance,<br>crafted to last forever.</p>
+        <p>Exquisite gold, silver and diamond jewellery, made with passion, precision and a tradition of trust.</p>
+        <div class="hero-cta">
+          <a class="btn-solid" href="#collections">Explore Collection</a>
+          <a class="btn-ghost" href="#appointment">Book an Appointment</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-slide" role="group" aria-roledescription="slide" aria-label="3 of 4">
+      <img src="assets/banner3.png" alt="Rajesh Jewellery Mart — Timeless elegance in every jewellery. A woman in a silk saree wearing a gold Lakshmi necklace and temple earrings." loading="lazy" decoding="async">
+      <a class="hero-link" href="#collections" aria-label="Explore our collections"></a>
+    </div>
+    <div class="hero-slide" role="group" aria-roledescription="slide" aria-label="4 of 4">
+      <img src="assets/banner4.png" alt="Rajesh Jewellery Mart — More than jewellery, it's a legacy. Gold, diamond, silver and platinum. A woman wearing a gold temple necklace with a deity pendant." loading="lazy" decoding="async">
+      <a class="hero-link" href="#collections" aria-label="Explore our collections"></a>
+    </div>
+  </div>
+  <div class="hero-controls">
+    <div class="hero-dots" role="group" aria-label="Choose slide"></div>
+    <div class="hero-arrows">
+      <button class="hero-btn hero-toggle" type="button" aria-label="Pause slideshow">
+        <svg class="i-pause" viewBox="0 0 16 16" fill="currentColor"><rect x="3.5" y="2.5" width="3" height="11"/><rect x="9.5" y="2.5" width="3" height="11"/></svg>
+        <svg class="i-play" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z"/></svg>
+      </button>
+      <button class="hero-btn hero-prev" type="button" aria-label="Previous slide"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3 5 8l5 5"/></svg></button>
+      <button class="hero-btn hero-next" type="button" aria-label="Next slide"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 3 5 5-5 5"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<section class="collections" id="collections">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">OUR COLLECTIONS</span>
+      <h2>A piece for every occasion</h2>
+      <div class="rule"></div>
+    </div>
+  </div>
+  <div class="coll-grid">
+    <div class="coll-card"><img src="assets/G1.jpeg" alt="Gold Jewellery" onerror="this.style.display='none'"><span>Gold Jewellery</span></div>
+    <div class="coll-card"><img src="assets/D1.jpeg" alt="Diamond Jewellery" onerror="this.style.display='none'"><span>Diamond Jewellery</span></div>
+    <div class="coll-card"><img src="assets/S1.jpeg" alt="Silver Jewellery" onerror="this.style.display='none'"><span>Silver Jewellery</span></div>
+    <div class="coll-card"><img src="assets/B1.jpeg" alt="Bridal Jewellery" onerror="this.style.display='none'"><span>Bridal Jewellery</span></div>
+    <div class="coll-card"><img src="assets/DW1.jpeg" alt="Daily Wear" onerror="this.style.display='none'"><span>Daily Wear</span></div>
+    <div class="coll-card"><img src="assets/T1.jpeg" alt="Traditional Jewellery" onerror="this.style.display='none'"><span>Traditional Jewellery</span></div>
+  </div>
+
+  <div class="wrap" style="margin-top:60px;">
+    <p style="font-size:0.8rem; letter-spacing:0.08em; color:var(--maroon); margin-bottom:10px;">GOLD JEWELLERY GALLERY</p>
+    <div class="strip" id="gold-strip"></div>
+    <p style="font-size:0.8rem; letter-spacing:0.08em; color:var(--maroon); margin:26px 0 10px;">DIAMOND JEWELLERY GALLERY</p>
+    <div class="strip" id="diamond-strip"></div>
+    <p style="font-size:0.8rem; letter-spacing:0.08em; color:var(--maroon); margin:26px 0 10px;">SILVER JEWELLERY GALLERY</p>
+    <div class="strip" id="silver-strip"></div>
+    <p style="font-size:0.8rem; letter-spacing:0.08em; color:var(--maroon); margin:26px 0 10px;">BRIDAL JEWELLERY GALLERY</p>
+    <div class="strip" id="bridal-strip"></div>
+    <p style="font-size:0.8rem; letter-spacing:0.08em; color:var(--maroon); margin:26px 0 10px;">TRADITIONAL JEWELLERY GALLERY</p>
+    <div class="strip" id="traditional-strip"></div>
+    <p style="font-size:0.8rem; letter-spacing:0.08em; color:var(--maroon); margin:26px 0 10px;">DAILY WEAR GALLERY</p>
+    <div class="strip" id="dailywear-strip"></div>
+  </div>
+</section>
+
+<section id="featured">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">FEATURED PIECES</span>
+      <h2>This season's selection</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="product-frame"><img src="assets/CLN1.jpeg" alt="Classic Lakshmi Necklace" onerror="this.parentElement.classList.add('ph-fallback')"></div>
+        <div class="product-name">Classic Lakshmi Necklace</div>
+        <div class="product-meta">Gold · Traditional</div>
+        <div class="product-price">Enquire for Price</div>
+      </div>
+      <div class="product-card">
+        <div class="product-frame"><img src="assets/EDN1.jpeg" alt="Elegant Diamond Necklace" onerror="this.parentElement.classList.add('ph-fallback')"></div>
+        <div class="product-name">Elegant Diamond Necklace</div>
+        <div class="product-meta">Diamond</div>
+        <div class="product-price">Enquire for Price</div>
+      </div>
+      <div class="product-card">
+        <div class="product-frame"><img src="assets/TGJ1.jpeg" alt="Temple Gold Jhumka" onerror="this.parentElement.classList.add('ph-fallback')"></div>
+        <div class="product-name">Temple Gold Jhumka</div>
+        <div class="product-meta">Gold · Temple Design</div>
+        <div class="product-price">Enquire for Price</div>
+      </div>
+      <div class="product-card">
+        <div class="product-frame"><img src="assets/PSA1.jpeg" alt="Premium Silver Anklets" onerror="this.parentElement.classList.add('ph-fallback')"></div>
+        <div class="product-name">Premium Silver Anklets</div>
+        <div class="product-meta">Silver</div>
+        <div class="product-price">Enquire for Price</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why" id="why">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">WHY RAJESH JEWELLERY MART</span>
+      <h2>Crafted with trust, chosen for a lifetime</h2>
+      <div class="rule" style="background:var(--gold);"></div>
+    </div>
+    <div class="why-grid">
+      <div class="why-item"><div class="num">I.</div><h3>Authentic Jewellery</h3><p>Every piece reflects genuine craftsmanship and honest materials.</p></div>
+      <div class="why-item"><div class="num">II.</div><h3>Exceptional Craftsmanship</h3><p>Designs shaped by skilled hands and careful detail.</p></div>
+      <div class="why-item"><div class="num">III.</div><h3>Transparent Pricing</h3><p>Clear information on making charges and material value.</p></div>
+      <div class="why-item"><div class="num">IV.</div><h3>Trusted Service</h3><p>Guidance from selection to after-sale care.</p></div>
+      <div class="why-item"><div class="num">V.</div><h3>Elegant Collections</h3><p>Curated jewellery for every celebration and everyday wear.</p></div>
+      <div class="why-item"><div class="num">VI.</div><h3>Customer First</h3><p>Every visit shaped around what matters to you.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="appointment" id="appointment">
+  <div class="wrap appt-wrap">
+    <div class="appt-text">
+      <span class="eyebrow" style="color:var(--maroon); font-size:0.75rem; letter-spacing:0.28em;">VISIT OR ENQUIRE</span>
+      <h2>Book an appointment</h2>
+      <p>Visit our showroom or reserve a private consultation with our jewellery specialists.</p>
+      <div class="contact-row">
+        <div>Showroom: <span class="placeholder-note">[Add address]</span></div>
+        <div>Phone: <span class="placeholder-note">[Add phone number]</span></div>
+        <div>WhatsApp: <span class="placeholder-note">[Add WhatsApp number]</span></div>
+      </div>
+    </div>
+    <form onsubmit="event.preventDefault(); this.querySelector('.submit-btn').textContent='Request Sent';">
+      <div class="form-row">
+        <input type="text" placeholder="Name" required>
+        <input type="tel" placeholder="Mobile Number" required>
+      </div>
+      <input type="email" placeholder="Email">
+      <div class="form-row">
+        <select><option>Preferred Branch</option></select>
+        <input type="date">
+      </div>
+      <textarea placeholder="Message"></textarea>
+      <button class="btn-outline submit-btn" type="submit" style="cursor:pointer;">Book an Appointment</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="assets/logo.jpg" alt="Rajesh Jewellery Mart">
+        <p>Exquisite jewellery crafted with passion, precision and timeless artistry.</p>
+      </div>
+      <div class="foot-col">
+        <h4>QUICK LINKS</h4>
+        <ul><li><a href="#top">Home</a></li><li><a href="#collections">Collections</a></li><li><a href="#why">About Us</a></li><li><a href="#appointment">Contact</a></li></ul>
+      </div>
+      <div class="foot-col">
+        <h4>JEWELLERY</h4>
+        <ul><li><a href="#featured">Gold</a></li><li><a href="#featured">Silver</a></li><li><a href="#featured">Diamond</a></li><li><a href="#featured">Bridal</a></li></ul>
+      </div>
+      <div class="foot-col">
+        <h4>SUPPORT</h4>
+        <ul><li><a href="#appointment">Contact Us</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms & Conditions</a></li></ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© Rajesh Jewellery Mart. All Rights Reserved.</span>
+      <span class="placeholder-note">Instagram · Facebook · WhatsApp — add links</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Builds each gallery strip from the assets/ naming convention.
+  // Missing files are simply skipped (no broken-image icons).
+  function buildStrip(id, prefix, count, ext){
+    const el = document.getElementById(id);
+    for(let i=1;i<=count;i++){
+      const img = document.createElement('img');
+      img.src = `assets/${prefix}${i}.${ext}`;
+      img.alt = `${prefix}${i}`;
+      img.loading = 'lazy';
+      img.onerror = function(){ this.remove(); };
+      el.appendChild(img);
+    }
+  }
+  buildStrip('gold-strip','G',10,'jpeg');
+  buildStrip('diamond-strip','D',10,'jpeg');
+  buildStrip('silver-strip','S',10,'jpeg');
+  buildStrip('bridal-strip','B',10,'jpeg');
+  buildStrip('traditional-strip','T',10,'jpeg');
+  buildStrip('dailywear-strip','DW',10,'jpeg');
+
+  // Tuck the hanging logo badge back into the header once the page scrolls.
+  (function(){
+    const header = document.querySelector('header');
+    const update = () => header.classList.toggle('is-scrolled', window.scrollY > 40);
+    window.addEventListener('scroll', update, {passive:true});
+    update();
+  })();
+
+  // Hero banner slider. Auto-advance is driven by the active dot's progress
+  // animation, so pausing (hover, button, hidden tab) keeps bar and timing in sync.
+  (function(){
+    const hero = document.querySelector('.hero');
+    const track = hero.querySelector('.hero-track');
+    const slides = [...hero.querySelectorAll('.hero-slide')];
+    const dotsWrap = hero.querySelector('.hero-dots');
+    const toggle = hero.querySelector('.hero-toggle');
+    const INTERVAL = 6000;
+    let idx = 0;
+
+    hero.style.setProperty('--interval', INTERVAL + 'ms');
+
+    const dots = slides.map((s, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'hero-dot';
+      b.setAttribute('aria-label', `Show slide ${i + 1} of ${slides.length}`);
+      b.innerHTML = '<span class="fill"></span>';
+      b.addEventListener('click', () => go(i));
+      b.querySelector('.fill').addEventListener('animationend', () => go(idx + 1));
+      dotsWrap.appendChild(b);
+      return b;
+    });
+
+    function go(n){
+      n = (n + slides.length) % slides.length;
+      slides.forEach((s, i) => {
+        const on = i === n;
+        s.classList.toggle('is-active', on);
+        s.setAttribute('aria-hidden', on ? 'false' : 'true');
+        s.inert = !on;
+        dots[i].classList.toggle('is-active', on);
+        dots[i].toggleAttribute('aria-current', on);
+      });
+      // Restart the progress bar even when re-selecting the current slide.
+      const fill = dots[n].querySelector('.fill');
+      fill.style.animation = 'none'; void fill.offsetWidth; fill.style.animation = '';
+      idx = n;
+      // Warm up the next banner so it is decoded before it fades in.
+      const next = slides[(n + 1) % slides.length].querySelector('img');
+      if (next.loading === 'lazy') next.loading = 'eager';
+    }
+
+    function setPaused(p){
+      hero.classList.toggle('is-paused', p);
+      toggle.setAttribute('aria-label', p ? 'Play slideshow' : 'Pause slideshow');
+      track.setAttribute('aria-live', p ? 'polite' : 'off');
+    }
+
+    hero.querySelector('.hero-prev').addEventListener('click', () => go(idx - 1));
+    hero.querySelector('.hero-next').addEventListener('click', () => go(idx + 1));
+    toggle.addEventListener('click', () => setPaused(!hero.classList.contains('is-paused')));
+
+    hero.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hero.classList.add('is-hover'); });
+    hero.addEventListener('pointerleave', () => hero.classList.remove('is-hover'));
+    document.addEventListener('visibilitychange', () => hero.classList.toggle('is-hidden', document.hidden));
+
+    hero.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') go(idx - 1);
+      if (e.key === 'ArrowRight') go(idx + 1);
+    });
+
+    let startX = null, startY = 0;
+    track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, {passive:true});
+    track.addEventListener('touchend', e => {
+      if (startX === null) return;
+      const dx = e.changedTouches[0].clientX - startX, dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(idx + (dx < 0 ? 1 : -1));
+      startX = null;
+    });
+
+    setPaused(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    go(0);
+  })();
+</script>
+
+</body>
+</html>
